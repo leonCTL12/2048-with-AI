@@ -7,27 +7,31 @@ public class Game : IGame
 {
     private readonly IAiAdviser _aiAdviser;
     private readonly IBoardProcessor _boardProcessor;
+    private readonly IGameResultEvaluator _gameResultEvaluator;
 
     private int[,] _board;
 
-    public Game(IAiAdviser aiAdviser, IBoardProcessor boardProcessor)
+    public Game(IAiAdviser aiAdviser, IBoardProcessor boardProcessor, IGameResultEvaluator gameResultEvaluator)
     {
         _aiAdviser = aiAdviser;
         _boardProcessor = boardProcessor;
+        _gameResultEvaluator = gameResultEvaluator;
     }
 
-    public void ProcessInput(InputCommand input)
+    public GameResult ProcessInput(InputCommand input)
     {
         if (input == InputCommand.AiSuggestion)
         {
             var suggestion = _aiAdviser.GetBestMove(_board);
             Console.WriteLine($"AI suggests to move: {suggestion}");
-            return;
+            return GameResult.Ongoing;
         }
 
         var direction = InputCommandToDirection(input);
-        _board = _boardProcessor.GetNewBoard(_board, direction);
+        _board = _boardProcessor.ExecuteMove(_board, direction);
+        _board = _boardProcessor.AddRandomCell(_board);
         VisualiseGame();
+        return _gameResultEvaluator.EvaluateGameResult(_board);
     }
 
     public void InitialiseGame()

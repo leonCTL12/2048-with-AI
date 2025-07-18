@@ -4,7 +4,7 @@ namespace _2048.Game;
 
 public interface IGame
 {
-    public void ProcessInput(InputCommand input);
+    public GameResult ProcessInput(InputCommand input);
     
     public void InitialiseGame();
     public void VisualiseGame();

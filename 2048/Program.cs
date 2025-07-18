@@ -17,6 +17,7 @@ class Program
         builder.RegisterType<Game.Game>().As<IGame>().SingleInstance();
         builder.RegisterType<AiAdviser.AiAdviser>().As<IAiAdviser>().SingleInstance();
         builder.RegisterType<BoardProcessor>().As<IBoardProcessor>().SingleInstance();
+        builder.RegisterType<GameResultEvaluator>().As<IGameResultEvaluator>().SingleInstance();
         var container = builder.Build();
         var gameManager = container.Resolve<IGameManager>();
         gameManager.StartGame();

@@ -39,7 +39,19 @@ public class GameManager :IGameManager
                 break;
             }
 
-            _game.ProcessInput(inputCommand);
+            var result = _game.ProcessInput(inputCommand);
+            
+            if (result == GameResult.Win)
+            {
+                Console.WriteLine("Congratulations! You've won the game!");
+                break;
+            }
+
+            if (result == GameResult.Lose)
+            {
+                Console.WriteLine("Game Over! You've lost the game.");
+                break;
+            }
         }
     }
 }
