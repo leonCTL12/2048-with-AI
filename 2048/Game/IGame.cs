@@ -1,6 +1,11 @@
+using _2048.Input;
+
 namespace _2048.Game;
 
 public interface IGame
 {
-    void StartGame();
+    public void ProcessInput(InputCommand input);
+    
+    public void InitialiseGame();
+    public void VisualiseGame();
 }

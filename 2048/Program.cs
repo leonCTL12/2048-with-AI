@@ -1,5 +1,8 @@
-﻿using _2048.Game;
+﻿using _2048.AiAdviser;
 using Autofac;
+using _2048.Game;
+using _2048.Input;
+
 
 namespace _2048;
 
@@ -9,9 +12,13 @@ class Program
     {
         var builder = new ContainerBuilder();
         
+        builder.RegisterType<GameManager.GameManager>().As<IGameManager>().SingleInstance();
+        builder.RegisterType<InputCommandRetriever>().As<IInputCommandRetriever>().SingleInstance();
         builder.RegisterType<Game.Game>().As<IGame>().SingleInstance();
+        builder.RegisterType<AiAdviser.AiAdviser>().As<IAiAdviser>().SingleInstance();
+        builder.RegisterType<BoardProcessor>().As<IBoardProcessor>().SingleInstance();
         var container = builder.Build();
-        var game = container.Resolve<IGame>();
-        game.StartGame();
+        var gameManager = container.Resolve<IGameManager>();
+        gameManager.StartGame();
     }
 }
