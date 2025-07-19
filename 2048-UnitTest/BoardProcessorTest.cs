@@ -222,6 +222,107 @@ public class BoardProcessorTests
         };
         ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Three Identical Tiles");
     }
+
+    [Test]
+    public void TestMergeLeft_FourIdenticalTiles()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 2, 2, 2 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 4, 4, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Four Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeLeft_InterruptedSequence()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 4, 2, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 2, 4, 2, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Interrupted Sequence");
+    }
+
+    [Test]
+    public void TestMergeLeft_SeparatedIdenticalTiles()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 2 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 4, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Separated Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeLeft_LargeValues()
+    {
+        int[,] board = new[,]
+        {
+            { 1024, 1024, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 2048, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Large Values");
+    }
+
+    [Test]
+    public void TestMergeLeft_MinimalBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 0, 0, 2 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Minimal Board");
+    }
+
     #endregion
 
     #region Merge Right Tests
@@ -423,8 +524,109 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Three Identical Tiles");
+        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Three IdenticalTiles");
     }
+
+    [Test]
+    public void TestMergeRight_FourIdenticalTiles()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 2, 2, 2 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 0, 4, 4 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Four Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeRight_InterruptedSequence()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 2, 4, 2 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 2, 4, 2 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Interrupted Sequence");
+    }
+
+    [Test]
+    public void TestMergeRight_SeparatedIdenticalTiles()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 2 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 0, 0, 4 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Separated Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeRight_LargeValues()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 0, 1024, 1024 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 0, 0, 2048 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Large Values");
+    }
+
+    [Test]
+    public void TestMergeRight_MinimalBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 0, 0, 2 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Minimal Board");
+    }
+
     #endregion
 
     #region Merge Up Tests
@@ -522,8 +724,8 @@ public class BoardProcessorTests
         int[,] expected = new[,]
         {
             { 4, 2, 8, 4 },
-            { 0, 8, 0, 0 },
-            { 0, 8, 0, 0 },
+            { 0, 16, 0, 0 },
+            { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
         ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Mixed Tiles");
@@ -608,7 +810,7 @@ public class BoardProcessorTests
         };
         ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Merged Tiles No Re-Merge");
     }
-    
+
     [Test]
     public void TestMergeUp_ThreeIdenticalTiles()
     {
@@ -627,6 +829,106 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 }
         };
         ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Three Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeUp_FourIdenticalTiles()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 2, 0, 0, 0 },
+            { 2, 0, 0, 0 },
+            { 2, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 4, 0, 0, 0 },
+            { 4, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Four Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeUp_InterruptedSequence()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 4, 0, 0, 0 },
+            { 2, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 4, 0, 0, 0 },
+            { 2, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Interrupted Sequence");
+    }
+
+    [Test]
+    public void TestMergeUp_SeparatedIdenticalTiles()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 2, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 4, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Separated Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeUp_LargeValues()
+    {
+        int[,] board = new[,]
+        {
+            { 1024, 0, 0, 0 },
+            { 1024, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 2048, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Large Values");
+    }
+
+    [Test]
+    public void TestMergeUp_MinimalBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 2, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Minimal Board");
     }
 
     #endregion
@@ -812,7 +1114,7 @@ public class BoardProcessorTests
         };
         ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Merged Tiles No Re-Merge");
     }
-    
+
     [Test]
     public void TestMergeDown_ThreeIdenticalTiles()
     {
@@ -831,6 +1133,106 @@ public class BoardProcessorTests
             { 4, 0, 0, 0 }
         };
         ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Three Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeDown_FourIdenticalTiles()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 2, 0, 0, 0 },
+            { 2, 0, 0, 0 },
+            { 2, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 4, 0, 0, 0 },
+            { 4, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Four Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeDown_InterruptedSequence()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 4, 0, 0, 0 },
+            { 2, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 2, 0, 0, 0 },
+            { 4, 0, 0, 0 },
+            { 2, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Interrupted Sequence");
+    }
+
+    [Test]
+    public void TestMergeDown_SeparatedIdenticalTiles()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 2, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 4, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Separated Identical Tiles");
+    }
+
+    [Test]
+    public void TestMergeDown_LargeValues()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 1024, 0, 0, 0 },
+            { 1024, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 2048, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Large Values");
+    }
+
+    [Test]
+    public void TestMergeDown_MinimalBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] expected = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 2, 0, 0, 0 }
+        };
+        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Minimal Board");
     }
 
     #endregion
