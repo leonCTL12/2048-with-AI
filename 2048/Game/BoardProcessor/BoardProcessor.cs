@@ -2,7 +2,7 @@ namespace _2048.Game.BoardProcessor;
 
 public class BoardProcessor : IBoardProcessor
 {
-    public int[,] ExecuteMove(int[,] board, Direction direction)
+    public BoardProcessResult ExecuteMove(int[,] board, Direction direction)
     {
         if (board.GetLength(0) != ProjectConstants.BoardDimension ||
             board.GetLength(1) != ProjectConstants.BoardDimension)
@@ -25,33 +25,39 @@ public class BoardProcessor : IBoardProcessor
         }
     }
     
-    private int[,] MergeLeft(int[,] board)
+    private BoardProcessResult MergeLeft(int[,] board)
     {
         var rows = HorizontalGather(board);
-        Merge(rows, false);
-        return HorizontalRowsToBoard(rows, false);
+        var score = Merge(rows, false);
+        var newBoard =  HorizontalRowsToBoard(rows, false);
+        return new BoardProcessResult(newBoard, score);
     }
     
-    private int[,] MergeRight(int[,] board)
+    private BoardProcessResult MergeRight(int[,] board)
     {
         var rows = HorizontalGather(board);
-        Merge(rows, true);
-        return HorizontalRowsToBoard(rows, true);
+        var score = Merge(rows, true);
+        var newBoard =  HorizontalRowsToBoard(rows, true);
+        return new BoardProcessResult(newBoard, score);
+        
     }
     
 
-    private int[,] MergeUp(int[,] board)
+    private BoardProcessResult MergeUp(int[,] board)
     {
         var columns = VerticalGather(board);
-        Merge(columns, false);
-        return VerticalColumnsToBoard(columns, false);
+        var score = Merge(columns, false);
+        var newBoard = VerticalColumnsToBoard(columns, false);
+        return new BoardProcessResult(newBoard, score);
+        
     }
     
-    private int[,] MergeDown(int[,] board)
+    private BoardProcessResult MergeDown(int[,] board)
     {
         var columns = VerticalGather(board);
-        Merge(columns, true);
-        return VerticalColumnsToBoard(columns, true);
+        var score = Merge(columns, true);
+        var newBoard =  VerticalColumnsToBoard(columns, true);
+        return new BoardProcessResult(newBoard, score);
     }
 
     private List<List<int>> HorizontalGather(int[,] board)
@@ -92,8 +98,10 @@ public class BoardProcessor : IBoardProcessor
     }
 
     //Use List<List<int>> is easier than using int[,] for merging operations, because of shifting elements
-    private void Merge(List<List<int>> gatheredList, bool reverse)
+    //returning the score produced by the merge operation
+    private int Merge(List<List<int>> gatheredList, bool reverse)
     {
+        int scoreProduced = 0;
         for (int i = 0; i < gatheredList.Count; i++)
         {
             List<int> row = gatheredList[i];
@@ -107,10 +115,13 @@ public class BoardProcessor : IBoardProcessor
                 if (row[j] == row[j + 1])
                 {
                     row[j] *= 2;
+                    scoreProduced += row[j];
                     row.RemoveAt(j + 1);
                 }
             }
         }
+
+        return scoreProduced;
     }
     
     private int[,] VerticalColumnsToBoard(List<List<int>> columns, bool reverse)

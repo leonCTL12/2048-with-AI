@@ -25,7 +25,7 @@ public class GameManager :IGameManager
         while (true)
         {
             Console.WriteLine("Waiting for input command... (Use arrow keys to move, 'q' to quit, 'a' for AI suggestion)");
-            
+            Console.WriteLine($"Current Score: {_game.Score}");
             var inputCommand = _inputCommandRetriever.GetCommand(); 
             
             if (inputCommand == InputCommand.Invalid)

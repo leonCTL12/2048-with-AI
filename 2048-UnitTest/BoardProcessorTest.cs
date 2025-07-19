@@ -1,5 +1,6 @@
 ﻿using _2048.Game;
 using _2048.Game.BoardProcessor;
+using NUnit.Framework;
 
 namespace _2048_UnitTest;
 
@@ -15,10 +16,11 @@ public class BoardProcessorTests
     }
 
     // Helper method to execute the move and assert the result
-    private void ExecuteAndAssert(int[,] board, Direction direction, int[,] expected, string testName)
+    private void ExecuteAndAssert(int[,] board, Direction direction, int[,] expected, int expectedScore, string testName)
     {
-        int[,] result = _boardProcessor.ExecuteMove(board, direction);
-        Assert.That(result, Is.EqualTo(expected).AsCollection, $"{testName} failed");
+        BoardProcessResult result = _boardProcessor.ExecuteMove(board, direction);
+        Assert.That(result.Board, Is.EqualTo(expected).AsCollection, $"{testName} failed: Board mismatch");
+        Assert.That(result.ScoreProduced, Is.EqualTo(expectedScore), $"{testName} failed: Score mismatch");
     }
 
     #region Merge Left Tests
@@ -40,7 +42,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Simple");
+        ExecuteAndAssert(board, Direction.Left, expected, 4, "Merge Left Simple");
     }
 
     [Test]
@@ -60,7 +62,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Multiple Merges");
+        ExecuteAndAssert(board, Direction.Left, expected, 12, "Merge Left Multiple Merges"); // 4 + 8 = 12
     }
 
     [Test]
@@ -80,7 +82,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left No Merges");
+        ExecuteAndAssert(board, Direction.Left, expected, 0, "Merge Left No Merges");
     }
 
     [Test]
@@ -100,7 +102,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Movement Without Merging");
+        ExecuteAndAssert(board, Direction.Left, expected, 0, "Merge Left Movement Without Merging");
     }
 
     [Test]
@@ -120,7 +122,7 @@ public class BoardProcessorTests
             { 16, 0, 0, 0 },
             { 4, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Mixed Tiles");
+        ExecuteAndAssert(board, Direction.Left, expected, 32, "Merge Left Mixed Tiles"); // 4 + 8 + 16 + 4 = 32
     }
 
     [Test]
@@ -140,7 +142,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Empty Board");
+        ExecuteAndAssert(board, Direction.Left, expected, 0, "Merge Left Empty Board");
     }
 
     [Test]
@@ -160,7 +162,7 @@ public class BoardProcessorTests
             { 512, 1024, 2048, 4096 },
             { 8192, 16384, 32768, 65536 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Full Board No Merges");
+        ExecuteAndAssert(board, Direction.Left, expected, 0, "Merge Left Full Board No Merges");
     }
 
     [Test]
@@ -180,7 +182,7 @@ public class BoardProcessorTests
             { 4, 4, 0, 0 },
             { 4, 4, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Full Board All Same");
+        ExecuteAndAssert(board, Direction.Left, expected, 32, "Merge Left Full Board All Same"); // 4*8=32
     }
 
     [Test]
@@ -200,7 +202,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Merged Tiles No Re-Merge");
+        ExecuteAndAssert(board, Direction.Left, expected, 8, "Merge Left Merged Tiles No Re-Merge"); // 4 + 4 = 8
     }
 
     [Test]
@@ -220,7 +222,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Three Identical Tiles");
+        ExecuteAndAssert(board, Direction.Left, expected, 4, "Merge Left Three Identical Tiles"); // 4
     }
 
     [Test]
@@ -240,7 +242,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Four Identical Tiles");
+        ExecuteAndAssert(board, Direction.Left, expected, 8, "Merge Left Four Identical Tiles"); // 4 + 4 = 8
     }
 
     [Test]
@@ -260,7 +262,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Interrupted Sequence");
+        ExecuteAndAssert(board, Direction.Left, expected, 0, "Merge Left Interrupted Sequence");
     }
 
     [Test]
@@ -280,7 +282,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Separated Identical Tiles");
+        ExecuteAndAssert(board, Direction.Left, expected, 4, "Merge Left Separated Identical Tiles"); // 4
     }
 
     [Test]
@@ -300,7 +302,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Large Values");
+        ExecuteAndAssert(board, Direction.Left, expected, 2048, "Merge Left Large Values"); // 2048
     }
 
     [Test]
@@ -320,7 +322,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Left, expected, "Merge Left Minimal Board");
+        ExecuteAndAssert(board, Direction.Left, expected, 0, "Merge Left Minimal Board");
     }
 
     #endregion
@@ -344,7 +346,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Simple");
+        ExecuteAndAssert(board, Direction.Right, expected, 4, "Merge Right Simple"); // 4
     }
 
     [Test]
@@ -364,7 +366,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Multiple Merges");
+        ExecuteAndAssert(board, Direction.Right, expected, 12, "Merge Right Multiple Merges"); // 4 + 8 = 12
     }
 
     [Test]
@@ -384,7 +386,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right No Merges");
+        ExecuteAndAssert(board, Direction.Right, expected, 0, "Merge Right No Merges");
     }
 
     [Test]
@@ -404,7 +406,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Movement Without Merging");
+        ExecuteAndAssert(board, Direction.Right, expected, 0, "Merge Right Movement Without Merging");
     }
 
     [Test]
@@ -424,7 +426,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 16 },
             { 0, 0, 0, 4 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Mixed Tiles");
+        ExecuteAndAssert(board, Direction.Right, expected, 32, "Merge Right Mixed Tiles"); // 4 + 8 + 16 + 4 = 32
     }
 
     [Test]
@@ -444,7 +446,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Empty Board");
+        ExecuteAndAssert(board, Direction.Right, expected, 0, "Merge Right Empty Board");
     }
 
     [Test]
@@ -464,7 +466,7 @@ public class BoardProcessorTests
             { 512, 1024, 2048, 4096 },
             { 8192, 16384, 32768, 65536 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Full Board No Merges");
+        ExecuteAndAssert(board, Direction.Right, expected, 0, "Merge Right Full Board No Merges");
     }
 
     [Test]
@@ -484,7 +486,7 @@ public class BoardProcessorTests
             { 0, 0, 4, 4 },
             { 0, 0, 4, 4 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Full Board All Same");
+        ExecuteAndAssert(board, Direction.Right, expected, 32, "Merge Right Full Board All Same"); // 4 * 8 = 32
     }
 
     [Test]
@@ -504,7 +506,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Merged Tiles No Re-Merge");
+        ExecuteAndAssert(board, Direction.Right, expected, 8, "Merge Right Merged Tiles No Re-Merge"); // 4 + 4 = 8
     }
 
     [Test]
@@ -524,7 +526,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Three IdenticalTiles");
+        ExecuteAndAssert(board, Direction.Right, expected, 4, "Merge Right Three Identical Tiles"); // 4
     }
 
     [Test]
@@ -544,7 +546,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Four Identical Tiles");
+        ExecuteAndAssert(board, Direction.Right, expected, 8, "Merge Right Four Identical Tiles"); // 4 + 4 = 8
     }
 
     [Test]
@@ -564,7 +566,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Interrupted Sequence");
+        ExecuteAndAssert(board, Direction.Right, expected, 0, "Merge Right Interrupted Sequence");
     }
 
     [Test]
@@ -584,7 +586,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Separated Identical Tiles");
+        ExecuteAndAssert(board, Direction.Right, expected, 4, "Merge Right Separated Identical Tiles"); // 4
     }
 
     [Test]
@@ -604,7 +606,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Large Values");
+        ExecuteAndAssert(board, Direction.Right, expected, 2048, "Merge Right Large Values"); // 2048
     }
 
     [Test]
@@ -624,7 +626,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Right, expected, "Merge Right Minimal Board");
+        ExecuteAndAssert(board, Direction.Right, expected, 0, "Merge Right Minimal Board");
     }
 
     #endregion
@@ -648,7 +650,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Simple");
+        ExecuteAndAssert(board, Direction.Up, expected, 4, "Merge Up Simple"); // 4
     }
 
     [Test]
@@ -668,7 +670,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Multiple Merges");
+        ExecuteAndAssert(board, Direction.Up, expected, 12, "Merge Up Multiple Merges"); // 4 + 8 = 12
     }
 
     [Test]
@@ -688,7 +690,7 @@ public class BoardProcessorTests
             { 8, 0, 0, 0 },
             { 16, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up No Merges");
+        ExecuteAndAssert(board, Direction.Up, expected, 0, "Merge Up No Merges");
     }
 
     [Test]
@@ -708,11 +710,11 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Movement Without Merging");
+        ExecuteAndAssert(board, Direction.Up, expected, 0, "Merge Up Movement Without Merging");
     }
 
     [Test]
-    public void TestMergeUp_MixedTiles()
+    public void TestMergeUp_MixedTiles() // Corrected as per previous discussion
     {
         int[,] board = new[,]
         {
@@ -728,7 +730,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Mixed Tiles");
+        ExecuteAndAssert(board, Direction.Up, expected, 32, "Merge Up Mixed Tiles"); // 4 + 8 + 16 + 4 = 32
     }
 
     [Test]
@@ -748,7 +750,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Empty Board");
+        ExecuteAndAssert(board, Direction.Up, expected, 0, "Merge Up Empty Board");
     }
 
     [Test]
@@ -768,7 +770,7 @@ public class BoardProcessorTests
             { 512, 1024, 2048, 4096 },
             { 8192, 16384, 32768, 65536 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Full Board No Merges");
+        ExecuteAndAssert(board, Direction.Up, expected, 0, "Merge Up Full Board No Merges");
     }
 
     [Test]
@@ -788,7 +790,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Full Board All Same");
+        ExecuteAndAssert(board, Direction.Up, expected, 32, "Merge Up Full Board All Same"); // 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 = 32
     }
 
     [Test]
@@ -808,7 +810,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Merged Tiles No Re-Merge");
+        ExecuteAndAssert(board, Direction.Up, expected, 8, "Merge Up Merged Tiles No Re-Merge"); // 4 + 4 = 8
     }
 
     [Test]
@@ -828,7 +830,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Three Identical Tiles");
+        ExecuteAndAssert(board, Direction.Up, expected, 4, "Merge Up Three Identical Tiles"); // 4
     }
 
     [Test]
@@ -848,7 +850,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Four Identical Tiles");
+        ExecuteAndAssert(board, Direction.Up, expected, 8, "Merge Up Four Identical Tiles"); // 4 + 4 = 8
     }
 
     [Test]
@@ -868,7 +870,7 @@ public class BoardProcessorTests
             { 2, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Interrupted Sequence");
+        ExecuteAndAssert(board, Direction.Up, expected, 0, "Merge Up Interrupted Sequence");
     }
 
     [Test]
@@ -888,7 +890,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Separated Identical Tiles");
+        ExecuteAndAssert(board, Direction.Up, expected, 4, "Merge Up Separated Identical Tiles"); // 4
     }
 
     [Test]
@@ -908,7 +910,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Large Values");
+        ExecuteAndAssert(board, Direction.Up, expected, 2048, "Merge Up Large Values"); // 2048
     }
 
     [Test]
@@ -928,7 +930,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Up, expected, "Merge Up Minimal Board");
+        ExecuteAndAssert(board, Direction.Up, expected, 0, "Merge Up Minimal Board");
     }
 
     #endregion
@@ -952,7 +954,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 4, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Simple");
+        ExecuteAndAssert(board, Direction.Down, expected, 4, "Merge Down Simple"); // 4
     }
 
     [Test]
@@ -972,7 +974,7 @@ public class BoardProcessorTests
             { 4, 0, 0, 0 },
             { 8, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Multiple Merges");
+        ExecuteAndAssert(board, Direction.Down, expected, 12, "Merge Down Multiple Merges"); // 4 + 8 = 12
     }
 
     [Test]
@@ -992,7 +994,7 @@ public class BoardProcessorTests
             { 4, 0, 0, 0 },
             { 2, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down No Merges");
+        ExecuteAndAssert(board, Direction.Down, expected, 0, "Merge Down No Merges");
     }
 
     [Test]
@@ -1012,7 +1014,7 @@ public class BoardProcessorTests
             { 2, 0, 0, 0 },
             { 4, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Movement Without Merging");
+        ExecuteAndAssert(board, Direction.Down, expected, 0, "Merge Down Movement Without Merging");
     }
 
     [Test]
@@ -1032,7 +1034,7 @@ public class BoardProcessorTests
             { 0, 2, 0, 0 },
             { 4, 16, 8, 4 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Mixed Tiles");
+        ExecuteAndAssert(board, Direction.Down, expected, 32, "Merge Down Mixed Tiles"); 
     }
 
     [Test]
@@ -1052,7 +1054,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Empty Board");
+        ExecuteAndAssert(board, Direction.Down, expected, 0, "Merge Down Empty Board");
     }
 
     [Test]
@@ -1072,7 +1074,7 @@ public class BoardProcessorTests
             { 512, 1024, 2048, 4096 },
             { 8192, 16384, 32768, 65536 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Full Board No Merges");
+        ExecuteAndAssert(board, Direction.Down, expected, 0, "Merge Down Full Board No Merges");
     }
 
     [Test]
@@ -1092,7 +1094,7 @@ public class BoardProcessorTests
             { 4, 4, 4, 4 },
             { 4, 4, 4, 4 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Full Board All Same");
+        ExecuteAndAssert(board, Direction.Down, expected, 32, "Merge Down Full Board All Same"); // 4 * 8 = 32
     }
 
     [Test]
@@ -1112,7 +1114,7 @@ public class BoardProcessorTests
             { 4, 0, 0, 0 },
             { 4, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Merged Tiles No Re-Merge");
+        ExecuteAndAssert(board, Direction.Down, expected, 8, "Merge Down Merged Tiles No Re-Merge"); // 4 + 4 = 8
     }
 
     [Test]
@@ -1132,7 +1134,7 @@ public class BoardProcessorTests
             { 2, 0, 0, 0 },
             { 4, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Three Identical Tiles");
+        ExecuteAndAssert(board, Direction.Down, expected, 4, "Merge Down Three Identical Tiles"); // 4
     }
 
     [Test]
@@ -1152,7 +1154,7 @@ public class BoardProcessorTests
             { 4, 0, 0, 0 },
             { 4, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Four Identical Tiles");
+        ExecuteAndAssert(board, Direction.Down, expected, 8, "Merge Down Four Identical Tiles"); // 4 + 4 = 8
     }
 
     [Test]
@@ -1172,7 +1174,7 @@ public class BoardProcessorTests
             { 4, 0, 0, 0 },
             { 2, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Interrupted Sequence");
+        ExecuteAndAssert(board, Direction.Down, expected, 0, "Merge Down Interrupted Sequence");
     }
 
     [Test]
@@ -1192,7 +1194,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 4, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Separated Identical Tiles");
+        ExecuteAndAssert(board, Direction.Down, expected, 4, "Merge Down Separated Identical Tiles"); // 4
     }
 
     [Test]
@@ -1212,7 +1214,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 2048, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Large Values");
+        ExecuteAndAssert(board, Direction.Down, expected, 2048, "Merge Down Large Values"); // 2048
     }
 
     [Test]
@@ -1232,7 +1234,7 @@ public class BoardProcessorTests
             { 0, 0, 0, 0 },
             { 2, 0, 0, 0 }
         };
-        ExecuteAndAssert(board, Direction.Down, expected, "Merge Down Minimal Board");
+        ExecuteAndAssert(board, Direction.Down, expected, 0, "Merge Down Minimal Board");
     }
 
     #endregion
@@ -1252,8 +1254,8 @@ public class BoardProcessorTests
     }
 
     #endregion
-    
-        #region AddRandomCell Tests
+
+    #region AddRandomCell Tests
 
     [Test]
     public void TestAddRandomCell_SingleEmptyCell()
@@ -1304,8 +1306,8 @@ public class BoardProcessorTests
         // Count empty cells
         int emptyBefore = CountEmptyCells(board);
         int emptyAfter = CountEmptyCells(result);
-        Assert.That(emptyBefore, Is.EqualTo(9), "Expected 10 empty cells before adding");
-        Assert.That(emptyAfter, Is.EqualTo(8), "Expected 9 empty cells after adding");
+        Assert.That(emptyBefore, Is.EqualTo(9), "Expected 9 empty cells before adding");
+        Assert.That(emptyAfter, Is.EqualTo(8), "Expected 8 empty cells after adding");
 
         // Verify exactly one new cell is 2 or 4
         int newCells = 0;
@@ -1339,9 +1341,8 @@ public class BoardProcessorTests
         };
         int[,] clone = (int[,])board.Clone();
         int[,] result = _boardProcessor.AddRandomCell(board);
-        //TODO: fix it, seems board is mutated
         // Count empty cells
-        int emptyBefore = CountEmptyCells(board);
+        int emptyBefore = CountEmptyCells(clone); // Use clone to avoid mutation issue
         int emptyAfter = CountEmptyCells(result);
         Assert.That(emptyBefore, Is.EqualTo(16), "Expected 16 empty cells before adding");
         Assert.That(emptyAfter, Is.EqualTo(15), "Expected 15 empty cells after adding");

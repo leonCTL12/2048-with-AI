@@ -10,7 +10,9 @@ public class Game : IGame
     private readonly IAiAdviser _aiAdviser;
     private readonly IBoardProcessor _boardProcessor;
     private readonly IGameResultEvaluator _gameResultEvaluator;
-
+    public int Score { get; private set; }
+    
+    
     private int[,] _board;
 
     public Game(IAiAdviser aiAdviser, IBoardProcessor boardProcessor, IGameResultEvaluator gameResultEvaluator)
@@ -30,7 +32,9 @@ public class Game : IGame
         }
 
         var direction = InputCommandToDirection(input);
-        _board = _boardProcessor.ExecuteMove(_board, direction);
+        var boardProcessResult = _boardProcessor.ExecuteMove(_board, direction);
+        _board = boardProcessResult.Board;
+        Score += boardProcessResult.ScoreProduced;
         _board = _boardProcessor.AddRandomCell(_board);
         VisualiseGame();
         return _gameResultEvaluator.EvaluateGameResult(_board);
