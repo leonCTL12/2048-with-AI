@@ -1,6 +1,8 @@
 ﻿using _2048.AiAdviser;
 using Autofac;
 using _2048.Game;
+using _2048.Game.BoardProcessor;
+using _2048.Game.GameResultEvaluator;
 using _2048.Input;
 
 

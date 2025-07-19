@@ -1,4 +1,4 @@
-namespace _2048.Game;
+namespace _2048.Game.GameResultEvaluator;
 
 public class GameResultEvaluator: IGameResultEvaluator
 {

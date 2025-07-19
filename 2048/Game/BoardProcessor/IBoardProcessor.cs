@@ -1,4 +1,4 @@
-namespace _2048.Game;
+namespace _2048.Game.BoardProcessor;
 
 public interface IBoardProcessor
 {

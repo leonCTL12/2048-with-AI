@@ -1,4 +1,5 @@
 ﻿using _2048.Game;
+using _2048.Game.BoardProcessor;
 
 namespace _2048_UnitTest;
 
