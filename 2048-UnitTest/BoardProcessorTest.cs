@@ -1252,4 +1252,146 @@ public class BoardProcessorTests
     }
 
     #endregion
+    
+        #region AddRandomCell Tests
+
+    [Test]
+    public void TestAddRandomCell_SingleEmptyCell()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 4, 8, 16 },
+            { 32, 64, 128, 256 },
+            { 512, 1024, 2048, 4096 },
+            { 8192, 16384, 32768, 0 }
+        };
+        int[,] result = _boardProcessor.AddRandomCell(board);
+
+        // Count empty cells before and after
+        int emptyBefore = CountEmptyCells(board);
+        int emptyAfter = CountEmptyCells(result);
+        Assert.That(emptyBefore, Is.EqualTo(1), "Expected 1 empty cell before adding");
+        Assert.That(emptyAfter, Is.EqualTo(0), "Expected 0 empty cells after adding");
+
+        // Verify the new cell is 2 or 4 at position [3,3]
+        Assert.That(result[3, 3], Is.AnyOf(2, 4), "New cell should be 2 or 4");
+        
+        // Verify all other cells are unchanged
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (i != 3 || j != 3)
+                {
+                    Assert.That(result[i, j], Is.EqualTo(board[i, j]), "Non-empty cells should not change");
+                }
+            }
+        }
+    }
+
+    [Test]
+    public void TestAddRandomCell_MultipleEmptyCells()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 8, 2, 2 },
+            { 4, 2, 0, 2 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 2 }
+        };
+        int[,] result = _boardProcessor.AddRandomCell(board);
+
+        // Count empty cells
+        int emptyBefore = CountEmptyCells(board);
+        int emptyAfter = CountEmptyCells(result);
+        Assert.That(emptyBefore, Is.EqualTo(9), "Expected 10 empty cells before adding");
+        Assert.That(emptyAfter, Is.EqualTo(8), "Expected 9 empty cells after adding");
+
+        // Verify exactly one new cell is 2 or 4
+        int newCells = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (board[i, j] == 0 && result[i, j] != 0)
+                {
+                    Assert.That(result[i, j], Is.AnyOf(2, 4), $"New cell at [{i},{j}] should be 2 or 4");
+                    newCells++;
+                }
+                else
+                {
+                    Assert.That(result[i, j], Is.EqualTo(board[i, j]), $"Cell at [{i},{j}] should not change");
+                }
+            }
+        }
+        Assert.That(newCells, Is.EqualTo(1), "Exactly one new cell should be added");
+    }
+
+    [Test]
+    public void TestAddRandomCell_AllEmptyCells()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int[,] clone = (int[,])board.Clone();
+        int[,] result = _boardProcessor.AddRandomCell(board);
+        //TODO: fix it, seems board is mutated
+        // Count empty cells
+        int emptyBefore = CountEmptyCells(board);
+        int emptyAfter = CountEmptyCells(result);
+        Assert.That(emptyBefore, Is.EqualTo(16), "Expected 16 empty cells before adding");
+        Assert.That(emptyAfter, Is.EqualTo(15), "Expected 15 empty cells after adding");
+
+        // Verify exactly one cell is 2 or 4
+        int newCells = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (result[i, j] != 0)
+                {
+                    Assert.That(result[i, j], Is.AnyOf(2, 4), $"New cell at [{i},{j}] should be 2 or 4");
+                    newCells++;
+                }
+            }
+        }
+        Assert.That(newCells, Is.EqualTo(1), "Exactly one new cell should be added");
+    }
+
+    [Test]
+    public void TestAddRandomCell_NoEmptyCells()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 4, 8, 16 },
+            { 32, 64, 128, 256 },
+            { 512, 1024, 2048, 4096 },
+            { 8192, 16384, 32768, 65536 }
+        };
+        Assert.Throws<InvalidOperationException>(() => _boardProcessor.AddRandomCell(board), 
+            "Expected InvalidOperationException when no empty cells are available");
+    }
+
+    // Helper method to count empty cells
+    private int CountEmptyCells(int[,] board)
+    {
+        int count = 0;
+        for (int i = 0; i < board.GetLength(0); i++)
+        {
+            for (int j = 0; j < board.GetLength(1); j++)
+            {
+                if (board[i, j] == 0)
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    #endregion
 }
