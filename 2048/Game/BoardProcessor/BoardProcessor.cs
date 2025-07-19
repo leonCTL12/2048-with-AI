@@ -156,7 +156,31 @@ public class BoardProcessor : IBoardProcessor
 
     public int[,] AddRandomCell(int[,] board)
     {
-        //TODO: Implement the logic to add a random cell (2 or 4) to an empty position on the board
+        //Keep this side effect free
+        board = (int[,])board.Clone();
+        List<(int, int)> emptyCells = new List<(int, int)>();
+        
+        for (int i = 0; i < board.GetLength(0); i++)
+        {
+            for (int j = 0; j < board.GetLength(1); j++)
+            {
+                if (board[i, j] == 0)
+                {
+                    emptyCells.Add((i, j));
+                }
+            }
+        }
+        
+        if (emptyCells.Count == 0)
+        {
+            throw new InvalidOperationException("No empty cells available to add a random cell.");
+        }
+        
+        int numberToAdd = Random.Shared.Next(0, 2) == 0 ? 2 : 4;
+        var randomIndex = Random.Shared.Next(emptyCells.Count);
+        var (row, col) = emptyCells[randomIndex];
+        board[row, col] = numberToAdd;
+        
         return board;
     }
 }
