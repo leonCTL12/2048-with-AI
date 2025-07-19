@@ -91,6 +91,7 @@ public class BoardProcessor : IBoardProcessor
         return columns;
     }
 
+    //Use List<List<int>> is easier than using int[,] for merging operations, because of shifting elements
     private void Merge(List<List<int>> gatheredList, bool reverse)
     {
         for (int i = 0; i < gatheredList.Count; i++)
