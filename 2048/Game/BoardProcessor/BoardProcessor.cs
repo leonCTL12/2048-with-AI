@@ -199,11 +199,33 @@ public class BoardProcessor : IBoardProcessor
 
     public int CountEmptyCells(int[,] board)
     {
-        throw new NotImplementedException();
+        int count = 0;
+        for (int i = 0; i < board.GetLength(0); i++)
+        {
+            for (int j = 0; j < board.GetLength(1); j++)
+            {
+                if (board[i, j] == 0)
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     public int GetMaxCellValue(int[,] board)
     {
-        throw new NotImplementedException();
+        int max = 0;
+        for (int i = 0; i < board.GetLength(0); i++)
+        {
+            for (int j = 0; j < board.GetLength(1); j++)
+            {
+                if (board[i, j] > max)
+                {
+                    max = board[i, j];
+                }
+            }
+        }
+        return max;
     }
 }
