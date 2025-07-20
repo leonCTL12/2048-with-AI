@@ -32,14 +32,14 @@ The AI assistant uses a **Random Simulation AI** to suggest the best move based 
 
 
 ## How to Play
-Board Visualization: The game displays a 4x4 grid where numbers represent tiles, and * represents empty cells.
-Controls:
+- Board Visualization: The game displays a 4x4 grid where numbers represent tiles, and * represents empty cells.
+- Controls:
 Use arrow keys to move tiles (Up, Down, Left, Right).
 Press a to get an AI-suggested move.
-Press q to quit the game.
-Objective: Merge tiles to create a 2048 tile while keeping the board open to avoid a game-over state.
-Scoring: Each merge adds the value of the new tile to the score (e.g., merging two 2s into a 4 adds 4 points).
-Example Gameplay
+Press q to quit the game.\n
+- Objective: Merge tiles to create a 2048 tile while keeping the board open to avoid a game-over state.
+- Scoring: Each merge adds the value of the new tile to the score (e.g., merging two 2s into a 4 adds 4 points).
+### Example Gameplay
 Starting board:
 
 
