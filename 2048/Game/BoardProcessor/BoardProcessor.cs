@@ -184,7 +184,8 @@ public class BoardProcessor : IBoardProcessor
         
         if (emptyCells.Count == 0)
         {
-            throw new InvalidOperationException("No empty cells available to add a random cell.");
+            //when the board is full, and user move to a direction that does not merge any cells, return the board as is
+            return board;
         }
         
         int numberToAdd = Random.Shared.Next(0, 2) == 0 ? 2 : 4;
