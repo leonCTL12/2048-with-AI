@@ -50,7 +50,8 @@ public class GameManager :IGameManager
                 continue;
             }
 
-            var result = _game.ProcessInput(inputCommand);
+            var direction = InputCommandToDirection(inputCommand);
+            var result = _game.ProcessInput(direction);
             _game.VisualiseGame();
             
             if (result == GameResult.Win)
@@ -64,6 +65,23 @@ public class GameManager :IGameManager
                 Console.WriteLine("Game Over! You've lost the game.");
                 break;
             }
+        }
+    }
+    
+    private Direction InputCommandToDirection(InputCommand command)
+    {
+        switch (command)
+        {
+            case InputCommand.Up:
+                return Direction.Up;
+            case InputCommand.Down:
+                return Direction.Down;
+            case InputCommand.Left:
+                return Direction.Left;
+            case InputCommand.Right:
+                return Direction.Right;
+            default:
+                throw new Exception("Invalid input command for direction conversion.");
         }
     }
 }

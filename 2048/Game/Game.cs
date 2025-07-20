@@ -9,6 +9,19 @@ public class Game : IGame
     private readonly IBoardProcessor _boardProcessor;
     private readonly IGameResultEvaluator _gameResultEvaluator;
     public int Score { get; private set; }
+    public IGame Clone()
+    {
+        return new Game(_boardProcessor, _gameResultEvaluator, (int[,])_board.Clone(), Score);
+    }
+
+    private Game(IBoardProcessor boardProcessor, IGameResultEvaluator gameResultEvaluator, int[,] board, int score)
+    {
+        _boardProcessor = boardProcessor;
+        _gameResultEvaluator = gameResultEvaluator;
+        _board = board;
+        Score = score;
+    }
+
     private int[,] _board;
 
     public Game(IBoardProcessor boardProcessor, IGameResultEvaluator gameResultEvaluator)
@@ -17,14 +30,16 @@ public class Game : IGame
         _gameResultEvaluator = gameResultEvaluator;
     }
 
-    public GameResult ProcessInput(InputCommand input)
+    public GameResult ProcessInput(Direction direction)
     {
-        var direction = InputCommandToDirection(input);
         var boardProcessResult = _boardProcessor.ExecuteMove(_board, direction);
         _board = boardProcessResult.Board;
         Score += boardProcessResult.ScoreProduced;
+        var result = _gameResultEvaluator.EvaluateGameResult(_board);
+        if (result != GameResult.Ongoing)
+            return result;
         _board = _boardProcessor.AddRandomCell(_board);
-        return _gameResultEvaluator.EvaluateGameResult(_board);
+        return GameResult.Ongoing;
     }
 
     public void InitialiseGame()
@@ -69,20 +84,5 @@ public class Game : IGame
         }
     }
 
-    private Direction InputCommandToDirection(InputCommand command)
-    {
-        switch (command)
-        {
-            case InputCommand.Up:
-                return Direction.Up;
-            case InputCommand.Down:
-                return Direction.Down;
-            case InputCommand.Left:
-                return Direction.Left;
-            case InputCommand.Right:
-                return Direction.Right;
-            default:
-                throw new Exception("Invalid input command for direction conversion.");
-        }
-    }
+
 }
