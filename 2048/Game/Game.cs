@@ -1,4 +1,3 @@
-using _2048.AiAdviser;
 using _2048.Game.BoardProcessor;
 using _2048.Game.GameResultEvaluator;
 using _2048.Input;
@@ -7,36 +6,24 @@ namespace _2048.Game;
 
 public class Game : IGame
 {
-    private readonly IAiAdviser _aiAdviser;
     private readonly IBoardProcessor _boardProcessor;
     private readonly IGameResultEvaluator _gameResultEvaluator;
     public int Score { get; private set; }
-    
-    
     private int[,] _board;
 
-    public Game(IAiAdviser aiAdviser, IBoardProcessor boardProcessor, IGameResultEvaluator gameResultEvaluator)
+    public Game(IBoardProcessor boardProcessor, IGameResultEvaluator gameResultEvaluator)
     {
-        _aiAdviser = aiAdviser;
         _boardProcessor = boardProcessor;
         _gameResultEvaluator = gameResultEvaluator;
     }
 
     public GameResult ProcessInput(InputCommand input)
     {
-        if (input == InputCommand.AiSuggestion)
-        {
-            var suggestion = _aiAdviser.GetBestMove(_board);
-            Console.WriteLine($"AI suggests to move: {suggestion}");
-            return GameResult.Ongoing;
-        }
-
         var direction = InputCommandToDirection(input);
         var boardProcessResult = _boardProcessor.ExecuteMove(_board, direction);
         _board = boardProcessResult.Board;
         Score += boardProcessResult.ScoreProduced;
         _board = _boardProcessor.AddRandomCell(_board);
-        VisualiseGame();
         return _gameResultEvaluator.EvaluateGameResult(_board);
     }
 
@@ -51,6 +38,13 @@ public class Game : IGame
                 _board[i, j] = place2 ? 0 : 2;
             }
         }
+        Score = 0;
+    }
+    
+    public void InitialiseGame(int[,] board, int score)
+    {
+        _board = board;
+        Score = 0;
     }
 
     public void VisualiseGame()

@@ -4,5 +4,5 @@ namespace _2048.AiAdviser;
 
 public interface IAiAdviser
 {
-    public Direction GetBestMove(int[,] board);
+    public Direction GetBestMove(IGame game);
 }

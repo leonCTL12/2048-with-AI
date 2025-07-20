@@ -1,3 +1,4 @@
+using _2048.AiAdviser;
 using _2048.Game;
 using _2048.Input;
 
@@ -6,12 +7,14 @@ namespace _2048.GameManager;
 public class GameManager :IGameManager
 {
     private readonly IInputCommandRetriever _inputCommandRetriever;
+    private readonly IAiAdviser _aiAdviser;
     private readonly IGame _game;
 
-    public GameManager(IInputCommandRetriever inputCommandRetriever, IGame game)
+    public GameManager(IInputCommandRetriever inputCommandRetriever, IGame game, IAiAdviser aiAdviser)
     {
         _inputCommandRetriever = inputCommandRetriever;
         _game = game;
+        _aiAdviser = aiAdviser;
     }
 
     public void StartGame()
@@ -39,7 +42,16 @@ public class GameManager :IGameManager
                 break;
             }
 
+            if (inputCommand == InputCommand.AiSuggestion)
+            {
+                
+                var suggestion = _aiAdviser.GetBestMove(_game);
+                Console.WriteLine($"AI suggests to move: {suggestion}");
+                continue;
+            }
+
             var result = _game.ProcessInput(inputCommand);
+            _game.VisualiseGame();
             
             if (result == GameResult.Win)
             {
