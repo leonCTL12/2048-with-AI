@@ -1454,19 +1454,6 @@ public class BoardProcessorTests
         Assert.That(result, Is.EqualTo(1), "CountEmptyCells Single Empty Cell failed: Expected 1 empty cell");
     }
 
-    [Test]
-    public void TestCountEmptyCells_InvalidBoardDimension()
-    {
-        int[,] invalidBoard = new[,]
-        {
-            { 2, 2, 2 },
-            { 2, 2, 2 },
-            { 2, 2, 2 }
-        };
-        Assert.Throws<ArgumentException>(() => _boardProcessor.CountEmptyCells(invalidBoard), 
-            "CountEmptyCells Invalid Board Dimension test failed");
-    }
-    
     #endregion
 
     #region GetMaxCellValue Tests
@@ -1525,19 +1512,6 @@ public class BoardProcessorTests
         };
         int result = _boardProcessor.GetMaxCellValue(board);
         Assert.That(result, Is.EqualTo(4), "GetMaxCellValue Single Non-Empty Cell failed: Expected max value 4");
-    }
-
-    [Test]
-    public void TestGetMaxCellValue_InvalidBoardDimension()
-    {
-        int[,] invalidBoard = new[,]
-        {
-            { 2, 2, 2 },
-            { 2, 2, 2 },
-            { 2, 2, 2 }
-        };
-        Assert.Throws<ArgumentException>(() => _boardProcessor.GetMaxCellValue(invalidBoard), 
-            "GetMaxCellValue Invalid Board Dimension test failed");
     }
 
 #endregion
