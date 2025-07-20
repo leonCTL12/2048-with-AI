@@ -1395,4 +1395,150 @@ public class BoardProcessorTests
     }
 
     #endregion
+    
+    #region CountEmptyCells Tests
+
+    [Test]
+    public void TestCountEmptyCells_EmptyBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int result = _boardProcessor.CountEmptyCells(board);
+        Assert.That(result, Is.EqualTo(16), "CountEmptyCells Empty Board failed: Expected 16 empty cells");
+    }
+
+    [Test]
+    public void TestCountEmptyCells_FullBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 4, 8, 16 },
+            { 32, 64, 128, 256 },
+            { 512, 1024, 2048, 4096 },
+            { 8192, 16384, 32768, 65536 }
+        };
+        int result = _boardProcessor.CountEmptyCells(board);
+        Assert.That(result, Is.EqualTo(0), "CountEmptyCells Full Board failed: Expected 0 empty cells");
+    }
+
+    [Test]
+    public void TestCountEmptyCells_MixedBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 4, 0 },
+            { 0, 8, 0, 16 },
+            { 32, 0, 64, 0 },
+            { 0, 128, 0, 256 }
+        };
+        int result = _boardProcessor.CountEmptyCells(board);
+        Assert.That(result, Is.EqualTo(8), "CountEmptyCells Mixed Board failed: Expected 8 empty cells");
+    }
+
+    [Test]
+    public void TestCountEmptyCells_SingleEmptyCell()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 4, 8, 16 },
+            { 32, 64, 128, 256 },
+            { 512, 1024, 2048, 4096 },
+            { 8192, 16384, 32768, 0 }
+        };
+        int result = _boardProcessor.CountEmptyCells(board);
+        Assert.That(result, Is.EqualTo(1), "CountEmptyCells Single Empty Cell failed: Expected 1 empty cell");
+    }
+
+    [Test]
+    public void TestCountEmptyCells_InvalidBoardDimension()
+    {
+        int[,] invalidBoard = new[,]
+        {
+            { 2, 2, 2 },
+            { 2, 2, 2 },
+            { 2, 2, 2 }
+        };
+        Assert.Throws<ArgumentException>(() => _boardProcessor.CountEmptyCells(invalidBoard), 
+            "CountEmptyCells Invalid Board Dimension test failed");
+    }
+    
+    #endregion
+
+    #region GetMaxCellValue Tests
+
+    [Test]
+    public void TestGetMaxCellValue_EmptyBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }
+        };
+        int result = _boardProcessor.GetMaxCellValue(board);
+        Assert.That(result, Is.EqualTo(0), "GetMaxCellValue Empty Board failed: Expected max value 0");
+    }
+
+    [Test]
+    public void TestGetMaxCellValue_FullBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 4, 8, 16 },
+            { 32, 64, 128, 256 },
+            { 512, 1024, 2048, 4096 },
+            { 8192, 16384, 32768, 65536 }
+        };
+        int result = _boardProcessor.GetMaxCellValue(board);
+        Assert.That(result, Is.EqualTo(65536), "GetMaxCellValue Full Board failed: Expected max value 65536");
+    }
+
+    [Test]
+    public void TestGetMaxCellValue_MixedBoard()
+    {
+        int[,] board = new[,]
+        {
+            { 2, 0, 4, 0 },
+            { 0, 8, 0, 16 },
+            { 32, 0, 64, 0 },
+            { 0, 128, 0, 256 }
+        };
+        int result = _boardProcessor.GetMaxCellValue(board);
+        Assert.That(result, Is.EqualTo(256), "GetMaxCellValue Mixed Board failed: Expected max value 256");
+    }
+
+    [Test]
+    public void TestGetMaxCellValue_SingleNonEmptyCell()
+    {
+        int[,] board = new[,]
+        {
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 },
+            { 0, 0, 0, 4 }
+        };
+        int result = _boardProcessor.GetMaxCellValue(board);
+        Assert.That(result, Is.EqualTo(4), "GetMaxCellValue Single Non-Empty Cell failed: Expected max value 4");
+    }
+
+    [Test]
+    public void TestGetMaxCellValue_InvalidBoardDimension()
+    {
+        int[,] invalidBoard = new[,]
+        {
+            { 2, 2, 2 },
+            { 2, 2, 2 },
+            { 2, 2, 2 }
+        };
+        Assert.Throws<ArgumentException>(() => _boardProcessor.GetMaxCellValue(invalidBoard), 
+            "GetMaxCellValue Invalid Board Dimension test failed");
+    }
+
+#endregion
 }
