@@ -1,6 +1,5 @@
 using _2048.Game.BoardProcessor;
 using _2048.Game.GameResultEvaluator;
-using _2048.Input;
 
 namespace _2048.Game;
 
@@ -9,6 +8,10 @@ public class Game : IGame
     private readonly IBoardProcessor _boardProcessor;
     private readonly IGameResultEvaluator _gameResultEvaluator;
     public int Score { get; private set; }
+    
+    //Count when accessed, it will be cleaner and more efficient
+    public int MaxCellValue => _boardProcessor.GetMaxCellValue(_board);
+    public int EmptyCellCount => _boardProcessor.CountEmptyCells(_board);
     public IGame Clone()
     {
         return new Game(_boardProcessor, _gameResultEvaluator, (int[,])_board.Clone(), Score);
@@ -30,15 +33,19 @@ public class Game : IGame
         _gameResultEvaluator = gameResultEvaluator;
     }
 
+
+
     public GameResult ProcessInput(Direction direction)
     {
         var boardProcessResult = _boardProcessor.ExecuteMove(_board, direction);
         _board = boardProcessResult.Board;
-        Score += boardProcessResult.ScoreProduced;
+        var scoreProduced = boardProcessResult.ScoreProduced;
+        Score += scoreProduced;
         var result = _gameResultEvaluator.EvaluateGameResult(_board);
         if (result != GameResult.Ongoing)
             return result;
         _board = _boardProcessor.AddRandomCell(_board);
+        
         return GameResult.Ongoing;
     }
 

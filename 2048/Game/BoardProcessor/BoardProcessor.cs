@@ -1,5 +1,6 @@
 namespace _2048.Game.BoardProcessor;
 
+//Where all the calculation and operation on the board happens
 public class BoardProcessor : IBoardProcessor
 {
     public BoardProcessResult ExecuteMove(int[,] board, Direction direction)
@@ -194,5 +195,15 @@ public class BoardProcessor : IBoardProcessor
         board[row, col] = numberToAdd;
         
         return board;
+    }
+
+    public int CountEmptyCells(int[,] board)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetMaxCellValue(int[,] board)
+    {
+        throw new NotImplementedException();
     }
 }
