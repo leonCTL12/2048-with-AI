@@ -1373,8 +1373,8 @@ public class BoardProcessorTests
             { 512, 1024, 2048, 4096 },
             { 8192, 16384, 32768, 65536 }
         };
-        Assert.Throws<InvalidOperationException>(() => _boardProcessor.AddRandomCell(board), 
-            "Expected InvalidOperationException when no empty cells are available");
+        int[,] result = _boardProcessor.AddRandomCell(board);
+        Assert.That(result, Is.EqualTo(board), "Expected no changes when there are no empty cells");
     }
 
     // Helper method to count empty cells
