@@ -4,8 +4,12 @@ namespace _2048.AiAdviser;
 
 public class AiAdviser: IAiAdviser
 {
-    private const int MovePerGame = 100;
+    //Limit the move so that reduce the noise of the subsequent random moves
+    private const int MovePerGame = 20;
     private const int GamePerDirection = 1000;
+    private const int MaxTileWeight = 100;
+    private const int EmptyCellWeight = 500;
+    
     public Direction GetBestMove(IGame game)
     {
         var directions = new[] { Direction.Up, Direction.Left, Direction.Right, Direction.Down };
@@ -26,7 +30,11 @@ public class AiAdviser: IAiAdviser
         {
             // Clone the game to avoid modifying the original game state
             var clonedGame = game.Clone();
-            totalScore += GetScoreForGame(clonedGame, direction);
+            var score = GetScoreForGame(clonedGame, direction);
+            var maxCellValue = clonedGame.MaxCellValue;
+            var emptyCellCount = clonedGame.EmptyCellCount;
+            var finalScoreForGame = maxCellValue * MaxTileWeight + emptyCellCount * EmptyCellWeight + score;
+            totalScore+= finalScoreForGame;
         }
         return totalScore / GamePerDirection;
     }
